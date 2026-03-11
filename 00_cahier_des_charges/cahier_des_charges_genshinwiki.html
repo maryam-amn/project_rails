@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cahier des charges — GenshinWiki</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          background: '#0d1117',
+          primaryColor: '#1a1d2e',
+          primaryTextColor: '#e2e8f0',
+          primaryBorderColor: '#2e3250',
+          lineColor: '#6c8eff',
+          secondaryColor: '#242741',
+          tertiaryColor: '#1a1d2e',
+          edgeLabelBackground: '#0d1117',
+          classText: '#e2e8f0',
+          titleColor: '#6c8eff',
+        },
+        classDiagram: { useMaxWidth: true },
+      });
+    });
+  </script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface2: #242741;
+      --border: #2e3250;
+      --accent: #6c8eff;
+      --accent2: #a78bfa;
+      --accent3: #34d399;
+      --accent4: #f59e0b;
+      --text: #e2e8f0;
+      --text-muted: #8892b0;
+      --danger: #f87171;
+      --success: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 50%, #1a1020 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(108,142,255,.15), transparent);
+      pointer-events: none;
+    }
+    .header-tag {
+      display: inline-block;
+      background: rgba(108,142,255,.15);
+      color: var(--accent);
+      border: 1px solid rgba(108,142,255,.3);
+      border-radius: 99px;
+      padding: .25rem .9rem;
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    header h1 {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, #6c8eff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .5rem;
+    }
+    header .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .meta-pills {
+      display: flex;
+      gap: .75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .meta-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: .3rem 1rem;
+      font-size: .82rem;
+      color: var(--text-muted);
+    }
+    .meta-pill strong { color: var(--text); }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 3rem;
+    }
+    .toc h2 {
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: .4rem .75rem;
+    }
+    .toc li { counter-increment: toc; }
+    .toc a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .92rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      transition: color .2s;
+    }
+    .toc a::before {
+      content: counter(toc, decimal-leading-zero) ".";
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 600;
+      min-width: 2rem;
+    }
+    .toc a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 1rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-number {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border-radius: 8px;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 1.5rem 0 .75rem;
+    }
+    h4 {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--accent2);
+      margin: 1.25rem 0 .5rem;
+    }
+    p { margin-bottom: .75rem; color: var(--text-muted); }
+    p strong { color: var(--text); }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .persona-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .persona-card .role {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: .5rem;
+    }
+    .role-visitor { color: var(--text-muted); }
+    .role-user    { color: var(--accent3); }
+    .role-admin   { color: var(--accent4); }
+    .persona-card p { font-size: .9rem; margin: 0; }
+
+    /* ── TABLES ── */
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    thead {
+      background: var(--surface2);
+    }
+    thead th {
+      padding: .65rem 1rem;
+      text-align: left;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td {
+      padding: .6rem 1rem;
+      color: var(--text);
+      vertical-align: top;
+    }
+    tbody td:first-child { color: var(--accent); font-family: monospace; }
+
+    /* ── CODE ── */
+    pre {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+      font-size: .83rem;
+      line-height: 1.6;
+    }
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      color: #e2e8f0;
+    }
+    .comment { color: #636e7b; }
+    .keyword { color: #f97583; }
+    .string  { color: #9ecbff; }
+    .klass   { color: #b392f0; }
+    .method  { color: #79b8ff; }
+    .sym     { color: #ffab70; }
+
+    /* ── PHASES ── */
+    .phases-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .phase-header {
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .phase-header h3 { margin: 0; color: var(--text); font-size: 1rem; }
+    .phase-badge {
+      font-size: .75rem;
+      padding: .2rem .75rem;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+    .badge-1 { background: rgba(108,142,255,.15); color: var(--accent); border: 1px solid rgba(108,142,255,.3); }
+    .badge-2 { background: rgba(52,211,153,.15);  color: var(--accent3); border: 1px solid rgba(52,211,153,.3); }
+    .badge-3 { background: rgba(167,139,250,.15); color: var(--accent2); border: 1px solid rgba(167,139,250,.3); }
+    .badge-4 { background: rgba(245,158,11,.15);  color: var(--accent4); border: 1px solid rgba(245,158,11,.3); }
+    .badge-5 { background: rgba(248,113,113,.15); color: var(--danger);  border: 1px solid rgba(248,113,113,.3); }
+    .phase-body { padding: 1.25rem 1.5rem; }
+    .checklist { list-style: none; }
+    .checklist li {
+      padding: .35rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+      font-size: .9rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '☐';
+      color: var(--border);
+      flex-shrink: 0;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    .validation-box {
+      background: rgba(52,211,153,.07);
+      border: 1px solid rgba(52,211,153,.2);
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      margin-top: 1rem;
+      font-size: .88rem;
+      color: var(--accent3);
+    }
+    .validation-box strong { display: block; margin-bottom: .25rem; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
+
+    /* ── QUESTIONS ── */
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .question-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .question-group h4 { margin-top: 0; }
+    .question-group ul { list-style: none; }
+    .question-group li {
+      padding: .4rem 0;
+      font-size: .88rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      display: flex;
+      gap: .5rem;
+    }
+    .question-group li:last-child { border-bottom: none; }
+    .question-group li::before { content: '?'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+    /* ── EVAL ── */
+    .eval-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .eval-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .eval-icon { font-size: 1.8rem; margin-bottom: .5rem; }
+    .eval-card h4 { margin: 0 0 .5rem; color: var(--text); font-size: .95rem; }
+    .eval-card p  { font-size: .83rem; margin: 0; }
+
+    /* ── ADVANCED ── */
+    .advanced-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+    .advanced-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+    .advanced-card .letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.8rem;
+      height: 1.8rem;
+      background: rgba(245,158,11,.15);
+      color: var(--accent4);
+      border: 1px solid rgba(245,158,11,.3);
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: .85rem;
+      margin-bottom: .75rem;
+    }
+    .advanced-card h4 { margin: 0 0 .5rem; color: var(--text); font-size: .95rem; }
+    .advanced-card p  { font-size: .85rem; }
+    .advanced-card ul { list-style: none; padding: 0; }
+    .advanced-card li {
+      font-size: .85rem;
+      color: var(--text-muted);
+      padding: .2rem 0;
+      display: flex;
+      gap: .5rem;
+    }
+    .advanced-card li::before { content: '→'; color: var(--accent4); flex-shrink: 0; }
+
+    /* ── SCHEMA ── */
+    .schema-box {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+    }
+    .schema-box pre {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* ── TECH STACK ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .75rem;
+    }
+    .stack-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+    }
+    .stack-item .label { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
+    .stack-item .value { font-size: .9rem; color: var(--accent); font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: .85rem;
+    }
+
+    /* ── BADGE inline ── */
+    .badge-inline {
+      display: inline-block;
+      font-size: .72rem;
+      padding: .1rem .55rem;
+      border-radius: 99px;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+    .bi-public  { background: rgba(52,211,153,.12); color: var(--accent3); border: 1px solid rgba(52,211,153,.25); }
+    .bi-auth    { background: rgba(108,142,255,.12); color: var(--accent);  border: 1px solid rgba(108,142,255,.25); }
+    .bi-admin   { background: rgba(245,158,11,.12);  color: var(--accent4); border: 1px solid rgba(245,158,11,.25); }
+    .bi-owner   { background: rgba(167,139,250,.12); color: var(--accent2); border: 1px solid rgba(167,139,250,.25); }
+
+    @media (max-width: 640px) {
+      .toc ol { grid-template-columns: 1fr; }
+      .card-grid, .questions-grid, .eval-grid, .advanced-grid, .stack-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="header-tag">Projet pédagogique — Apprentie 2e année</div>
+  <h1>GenshinWiki</h1>
+  <p class="subtitle">Wiki collaboratif — Application API Rails</p>
+  <div class="meta-pills">
+    <span class="meta-pill"><strong>Version</strong> 1.0</span>
+    <span class="meta-pill"><strong>Date</strong> Mars 2026</span>
+    <span class="meta-pill"><strong>Destinataire</strong> Maryam</span>
+    <span class="meta-pill"><strong>Stack</strong> Ruby on Rails 8</span>
+  </div>
+</header>
+
+<!-- ═══════════════════ CONTAINER ═══════════════════ -->
+<div class="container">
+
+  <!-- TABLE DES MATIÈRES -->
+  <div class="toc">
+    <h2>Table des matières</h2>
+    <ol>
+      <li><a href="#contexte">Contexte &amp; Objectifs</a></li>
+      <li><a href="#description">Description du projet</a></li>
+      <li><a href="#modeles">Modèles de données</a></li>
+      <li><a href="#uml">Diagramme UML</a></li>
+      <li><a href="#api">API REST</a></li>
+      <li><a href="#validations">Validations &amp; Callbacks</a></li>
+      <li><a href="#phases">Phases &amp; Livrables</a></li>
+      <li><a href="#avancee">Phase avancée</a></li>
+      <li><a href="#contraintes">Contraintes techniques</a></li>
+      <li><a href="#evaluation">Critères d'évaluation</a></li>
+      <li><a href="#questions">Questions de référence</a></li>
+    </ol>
+  </div>
+
+  <!-- ═══ 1. CONTEXTE ═══ -->
+  <section id="contexte">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2>Contexte &amp; Objectifs</h2>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Contexte</h3>
+      <p>Dans le cadre de ta formation d'apprentie en informatique, ce projet a pour but de te faire pratiquer et consolider les bases du développement web backend à travers un projet concret, progressif et représentatif des applications que tu rencontreras en entreprise.</p>
+      <p>Le projet se construit en plusieurs phases. Chaque phase introduit de nouveaux concepts, en s'appuyant sur ce qui a été appris précédemment. L'objectif n'est pas seulement que le code fonctionne, mais que tu sois capable d'<strong>expliquer pourquoi</strong> tu as fait tel ou tel choix.</p>
+    </div>
+
+    <h3>Objectifs pédagogiques</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Compétence</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Expliquer et appliquer les principes de la programmation orientée objet (héritage, encapsulation, polymorphisme)</td></tr>
+          <tr><td>2</td><td>Concevoir un schéma de base de données avec des relations cohérentes</td></tr>
+          <tr><td>3</td><td>Écrire des tests unitaires et d'intégration</td></tr>
+          <tr><td>4</td><td>Créer une API REST respectant les conventions HTTP</td></tr>
+          <tr><td>5</td><td>Implémenter un système d'authentification et de gestion des droits</td></tr>
+          <tr><td>6</td><td>Structurer son code avec des services et gérer les erreurs proprement</td></tr>
+          <tr><td>7</td><td>Utiliser les outils professionnels (Rubocop, Swagger, Sidekiq)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ 2. DESCRIPTION ═══ -->
+  <section id="description">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2>Description du projet</h2>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Présentation</h3>
+      <p><strong>GenshinWiki</strong> est une application web de type wiki collaboratif autour du jeu Genshin Impact. Elle permet à des utilisateurs de consulter une base de données de personnages, de les ajouter à leur collection personnelle, et de laisser des notes et commentaires.</p>
+      <p>L'application expose une <strong>API REST</strong> qui pourrait être consommée par un frontend (web, mobile). La gestion des données se fait entièrement côté backend.</p>
+    </div>
+
+    <h3>Personas</h3>
+    <div class="card-grid">
+      <div class="persona-card">
+        <div class="role role-visitor">Visiteur</div>
+        <p>Peut consulter les personnages et lire les reviews. Aucun compte requis.</p>
+      </div>
+      <div class="persona-card">
+        <div class="role role-user">Utilisateur</div>
+        <p>Peut créer un compte, gérer sa collection personnelle, poster des reviews.</p>
+      </div>
+      <div class="persona-card">
+        <div class="role role-admin">Administrateur</div>
+        <p>Peut créer, modifier et supprimer des personnages. Peut modérer les reviews.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 3. MODÈLES ═══ -->
+  <section id="modeles">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2>Modèles de données</h2>
+    </div>
+
+    <h3>Schéma général</h3>
+    <div class="schema-box">
+      <pre><code><span class="klass">User</span> ──────────────────────────────────────────────────────┐
+ ├── has_one  :<span class="sym">profile</span>                                       │
+ ├── has_many :<span class="sym">reviews</span>                                       │
+ └── has_many :<span class="sym">collection_entries</span>                            │
+                                                             │
+<span class="klass">Character</span> (STI)                                              │
+ ├── <span class="klass">PlayableCharacter</span>                                       │
+ │    ├── belongs_to :<span class="sym">element</span>                                │
+ │    ├── belongs_to :<span class="sym">weapon_type</span>                            │
+ │    ├── has_many :<span class="sym">reviews</span>  ◄──────────────────────────────┘
+ │    └── has_many :<span class="sym">collection_entries</span>
+ │
+ └── <span class="klass">BossCharacter</span>
+      └── has_many :<span class="sym">boss_drops</span>
+
+<span class="klass">Element</span>       (Pyro, Hydro, Cryo, Geo, Anemo, Electro, Dendro)
+<span class="klass">WeaponType</span>    (Sword, Bow, Catalyst, Claymore, Polearm)
+<span class="klass">Tag</span>           (meta, support, healer, dps, …)
+<span class="klass">CharacterTag</span>  (table de jointure Character &lt;-&gt; Tag)</code></pre>
+    </div>
+
+    <h3>Détail des modèles</h3>
+
+    <h4>User</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>email</td><td>string</td><td>unique, obligatoire</td></tr>
+          <tr><td>password_digest</td><td>string</td><td>obligatoire</td></tr>
+          <tr><td>role</td><td>enum</td><td><code>user</code>, <code>moderator</code>, <code>admin</code> — défaut : <code>user</code></td></tr>
+          <tr><td>created_at</td><td>datetime</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Profile</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>user_id</td><td>integer</td><td>FK, unique</td></tr>
+          <tr><td>username</td><td>string</td><td>unique, obligatoire</td></tr>
+          <tr><td>bio</td><td>text</td><td>optionnel</td></tr>
+          <tr><td>avatar_url</td><td>string</td><td>optionnel</td></tr>
+          <tr><td>favorite_element</td><td>string</td><td>optionnel</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Character (classe de base — STI)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>type</td><td>string</td><td>discriminant STI (<code>PlayableCharacter</code>, <code>BossCharacter</code>)</td></tr>
+          <tr><td>name</td><td>string</td><td>unique, obligatoire</td></tr>
+          <tr><td>description</td><td>text</td><td>obligatoire, min. 20 caractères</td></tr>
+          <tr><td>rarity</td><td>integer</td><td>entre 1 et 5</td></tr>
+          <tr><td>average_rating</td><td>decimal</td><td>calculé automatiquement</td></tr>
+          <tr><td>region</td><td>string</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>PlayableCharacter (hérite de Character)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>element_id</td><td>integer</td><td>FK obligatoire</td></tr>
+          <tr><td>weapon_type_id</td><td>integer</td><td>FK obligatoire</td></tr>
+          <tr><td>base_hp</td><td>integer</td><td>> 0</td></tr>
+          <tr><td>base_attack</td><td>integer</td><td>> 0</td></tr>
+          <tr><td>base_defense</td><td>integer</td><td>> 0</td></tr>
+          <tr><td>is_limited</td><td>boolean</td><td>défaut : false</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>BossCharacter (hérite de Character)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>is_weekly_boss</td><td>boolean</td><td>défaut : false</td></tr>
+          <tr><td>location</td><td>string</td><td>—</td></tr>
+          <tr><td>recommended_level</td><td>integer</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>CollectionEntry — table de jointure enrichie (User ↔ PlayableCharacter)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>user_id</td><td>integer</td><td>FK</td></tr>
+          <tr><td>character_id</td><td>integer</td><td>FK</td></tr>
+          <tr><td>level</td><td>integer</td><td>entre 1 et 90</td></tr>
+          <tr><td>constellation</td><td>integer</td><td>entre 0 et 6</td></tr>
+          <tr><td>notes</td><td>text</td><td>optionnel</td></tr>
+          <tr><td>Unicité</td><td>—</td><td><code>user_id</code> + <code>character_id</code> unique</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Review</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Champ</th><th>Type</th><th>Contraintes</th></tr></thead>
+        <tbody>
+          <tr><td>user_id</td><td>integer</td><td>FK</td></tr>
+          <tr><td>character_id</td><td>integer</td><td>FK</td></tr>
+          <tr><td>rating</td><td>integer</td><td>entre 1 et 5, obligatoire</td></tr>
+          <tr><td>body</td><td>text</td><td>10 à 2000 caractères</td></tr>
+          <tr><td>contains_spoiler</td><td>boolean</td><td>défaut : false</td></tr>
+          <tr><td>Unicité</td><td>—</td><td>un utilisateur = une review par personnage</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ 4. API ═══ -->
+  <section id="api">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <h2>API REST</h2>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Conventions générales</h3>
+      <p>Toutes les routes sont préfixées par <code>/api/v1/</code>. Les réponses sont en <strong>JSON</strong>. L'authentification utilise un token Bearer : <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+      <p>Les erreurs retournent un JSON structuré :</p>
+      <pre><code>{
+  <span class="string">"error"</span>: <span class="string">"Message lisible"</span>,
+  <span class="string">"details"</span>: { <span class="string">"field"</span>: [<span class="string">"message d'erreur"</span>] }
+}</code></pre>
+    </div>
+
+    <h3>Authentification</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Auth</th></tr></thead>
+        <tbody>
+          <tr><td>POST</td><td>/api/v1/auth/register</td><td>Créer un compte</td><td><span class="badge-inline bi-public">Public</span></td></tr>
+          <tr><td>POST</td><td>/api/v1/auth/login</td><td>Obtenir un token</td><td><span class="badge-inline bi-public">Public</span></td></tr>
+          <tr><td>DELETE</td><td>/api/v1/auth/logout</td><td>Invalider le token</td><td><span class="badge-inline bi-auth">Auth</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Personnages</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Auth</th></tr></thead>
+        <tbody>
+          <tr><td>GET</td><td>/api/v1/characters</td><td>Liste paginée</td><td><span class="badge-inline bi-public">Public</span></td></tr>
+          <tr><td>GET</td><td>/api/v1/characters/:id</td><td>Détail d'un personnage</td><td><span class="badge-inline bi-public">Public</span></td></tr>
+          <tr><td>POST</td><td>/api/v1/characters</td><td>Créer un personnage</td><td><span class="badge-inline bi-admin">Admin</span></td></tr>
+          <tr><td>PATCH</td><td>/api/v1/characters/:id</td><td>Modifier un personnage</td><td><span class="badge-inline bi-admin">Admin</span></td></tr>
+          <tr><td>DELETE</td><td>/api/v1/characters/:id</td><td>Supprimer un personnage</td><td><span class="badge-inline bi-admin">Admin</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Reviews</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Auth</th></tr></thead>
+        <tbody>
+          <tr><td>GET</td><td>/api/v1/characters/:id/reviews</td><td>Reviews d'un personnage</td><td><span class="badge-inline bi-public">Public</span></td></tr>
+          <tr><td>POST</td><td>/api/v1/characters/:id/reviews</td><td>Poster une review</td><td><span class="badge-inline bi-auth">Auth</span></td></tr>
+          <tr><td>PATCH</td><td>/api/v1/reviews/:id</td><td>Modifier sa review</td><td><span class="badge-inline bi-owner">Propriétaire</span></td></tr>
+          <tr><td>DELETE</td><td>/api/v1/reviews/:id</td><td>Supprimer une review</td><td><span class="badge-inline bi-owner">Propriétaire</span> <span class="badge-inline bi-admin">Admin</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Collection utilisateur</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Auth</th></tr></thead>
+        <tbody>
+          <tr><td>GET</td><td>/api/v1/users/:id/collection</td><td>Voir une collection</td><td><span class="badge-inline bi-public">Public</span></td></tr>
+          <tr><td>POST</td><td>/api/v1/users/:id/collection</td><td>Ajouter un personnage</td><td><span class="badge-inline bi-owner">Propriétaire</span></td></tr>
+          <tr><td>PATCH</td><td>/api/v1/collection_entries/:id</td><td>Mettre à jour (niveau…)</td><td><span class="badge-inline bi-owner">Propriétaire</span></td></tr>
+          <tr><td>DELETE</td><td>/api/v1/collection_entries/:id</td><td>Retirer de la collection</td><td><span class="badge-inline bi-owner">Propriétaire</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Filtres disponibles sur GET /api/v1/characters</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Paramètre</th><th>Type</th><th>Exemple</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>element</td><td>string</td><td><code>?element=pyro</code></td><td>Filtrer par élément</td></tr>
+          <tr><td>weapon_type</td><td>string</td><td><code>?weapon_type=sword</code></td><td>Filtrer par arme</td></tr>
+          <tr><td>min_rarity</td><td>integer</td><td><code>?min_rarity=4</code></td><td>Rareté minimale</td></tr>
+          <tr><td>type</td><td>string</td><td><code>?type=playable</code></td><td><code>playable</code> ou <code>boss</code></td></tr>
+          <tr><td>tag</td><td>string</td><td><code>?tag=meta</code></td><td>Filtrer par tag</td></tr>
+          <tr><td>sort</td><td>string</td><td><code>?sort=rarity</code></td><td>Trier par champ</td></tr>
+          <tr><td>order</td><td>string</td><td><code>?order=desc</code></td><td><code>asc</code> ou <code>desc</code></td></tr>
+          <tr><td>page</td><td>integer</td><td><code>?page=2</code></td><td>Numéro de page (défaut : 1)</td></tr>
+          <tr><td>per_page</td><td>integer</td><td><code>?per_page=20</code></td><td>Items par page (max : 50)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ UML ═══ -->
+  <section id="uml">
+    <div class="section-header">
+      <div class="section-number" style="background: linear-gradient(135deg, #34d399, #6c8eff);">◈</div>
+      <h2>Diagramme UML</h2>
+    </div>
+    <p>Vue d'ensemble des modèles, de leurs attributs, et de leurs relations.</p>
+
+    <div style="background:#0d1117; border:1px solid #2e3250; border-radius:12px; padding:1.5rem; overflow-x:auto; margin-bottom:1.5rem;">
+      <div class="mermaid">
+classDiagram
+  direction TB
+
+  class User {
+    +integer id
+    +string email
+    +string password_digest
+    +enum role
+    +datetime created_at
+  }
+
+  class Profile {
+    +integer id
+    +integer user_id
+    +string username
+    +text bio
+    +string avatar_url
+    +string favorite_element
+  }
+
+  class Character {
+    &lt;&lt;STI base&gt;&gt;
+    +integer id
+    +string type
+    +string name
+    +text description
+    +integer rarity
+    +decimal average_rating
+    +string region
+  }
+
+  class PlayableCharacter {
+    +integer element_id
+    +integer weapon_type_id
+    +integer base_hp
+    +integer base_attack
+    +integer base_defense
+    +boolean is_limited
+  }
+
+  class BossCharacter {
+    +boolean is_weekly_boss
+    +string location
+    +integer recommended_level
+  }
+
+  class Element {
+    +integer id
+    +string name
+    +string color
+  }
+
+  class WeaponType {
+    +integer id
+    +string name
+  }
+
+  class Tag {
+    +integer id
+    +string name
+  }
+
+  class CharacterTag {
+    +integer character_id
+    +integer tag_id
+  }
+
+  class CollectionEntry {
+    +integer id
+    +integer user_id
+    +integer character_id
+    +integer level
+    +integer constellation
+    +text notes
+  }
+
+  class Review {
+    +integer id
+    +integer user_id
+    +integer character_id
+    +integer rating
+    +text body
+    +boolean contains_spoiler
+  }
+
+  Character <|-- PlayableCharacter : hérite
+  Character <|-- BossCharacter : hérite
+
+  User "1" --> "1" Profile : has_one
+  User "1" --> "*" Review : has_many
+  User "1" --> "*" CollectionEntry : has_many
+
+  PlayableCharacter "*" --> "1" Element : belongs_to
+  PlayableCharacter "*" --> "1" WeaponType : belongs_to
+  PlayableCharacter "1" --> "*" Review : has_many
+  PlayableCharacter "1" --> "*" CollectionEntry : has_many
+  PlayableCharacter "1" --> "*" CharacterTag : has_many
+  Tag "1" --> "*" CharacterTag : has_many
+      </div>
+    </div>
+
+    <h3>Légende des relations</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:.75rem; margin-bottom:1rem;">
+      <div class="card" style="padding:.85rem 1.1rem;">
+        <h4 style="margin-top:0; font-size:.85rem;">Héritage (STI)</h4>
+        <p style="font-size:.82rem; margin:0;"><code>PlayableCharacter</code> et <code>BossCharacter</code> partagent la table <code>characters</code>. La colonne <code>type</code> détermine la classe instanciée.</p>
+      </div>
+      <div class="card" style="padding:.85rem 1.1rem;">
+        <h4 style="margin-top:0; font-size:.85rem;">has_one / belongs_to</h4>
+        <p style="font-size:.82rem; margin:0;">Un <code>User</code> a exactement un <code>Profile</code>. La clé étrangère <code>user_id</code> est sur la table <code>profiles</code>.</p>
+      </div>
+      <div class="card" style="padding:.85rem 1.1rem;">
+        <h4 style="margin-top:0; font-size:.85rem;">has_many :through</h4>
+        <p style="font-size:.82rem; margin:0;"><code>Character</code> → <code>CharacterTag</code> → <code>Tag</code>. La table de jointure permet d'ajouter des attributs si nécessaire.</p>
+      </div>
+      <div class="card" style="padding:.85rem 1.1rem;">
+        <h4 style="margin-top:0; font-size:.85rem;">Table de jointure enrichie</h4>
+        <p style="font-size:.82rem; margin:0;"><code>CollectionEntry</code> relie <code>User</code> et <code>Character</code> avec des données supplémentaires : level, constellation, notes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 5. VALIDATIONS ═══ -->
+  <section id="validations">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <h2>Validations &amp; Callbacks</h2>
+    </div>
+
+    <p>Les règles suivantes doivent être implémentées <strong>dans les modèles</strong>, pas dans les contrôleurs.</p>
+
+    <pre><code><span class="klass">Character</span>
+  ✓ name          : obligatoire, unique
+  ✓ rarity        : entre 1 et 5
+  ✓ description   : obligatoire, minimum 20 caractères
+
+<span class="klass">PlayableCharacter</span>
+  ✓ base_hp, base_attack, base_defense : obligatoires, &gt; 0
+  ✓ element       : obligatoire
+  ✓ weapon_type   : obligatoire
+
+<span class="klass">Review</span>
+  ✓ rating        : obligatoire, entre 1 et 5
+  ✓ body          : entre 10 et 2000 caractères
+  ✓ Un utilisateur ne peut poster qu'une seule review par personnage
+
+<span class="klass">CollectionEntry</span>
+  ✓ level         : entre 1 et 90
+  ✓ constellation : entre 0 et 6
+  ✓ Un utilisateur ne peut ajouter un personnage qu'une seule fois
+
+<span class="klass">User</span>
+  ✓ email         : obligatoire, unique, format valide
+  ✓ password      : minimum 8 caractères</code></pre>
+
+    <h3>Callbacks à implémenter</h3>
+    <pre><code><span class="klass">Review</span>  <span class="keyword">after_create</span>  → recalculer <span class="sym">average_rating</span> sur le Character associé
+<span class="klass">Review</span>  <span class="keyword">after_destroy</span> → recalculer <span class="sym">average_rating</span> sur le Character associé
+<span class="klass">User</span>    <span class="keyword">before_save</span>   → normaliser l'email en minuscules</code></pre>
+  </section>
+
+  <!-- ═══ 6. STRUCTURE ═══ -->
+
+  <!-- ═══ 7. PHASES ═══ -->
+  <section id="phases">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <h2>Phases &amp; Livrables</h2>
+    </div>
+
+    <div class="phases-grid">
+
+      <div class="phase-card" style="border-color: rgba(52,211,153,.35);">
+        <div class="phase-header" style="background: rgba(52,211,153,.06);">
+          <h3>Phase 0 — Mise en place &amp; Organisation</h3>
+          <span class="phase-badge badge-2">Avant de coder</span>
+        </div>
+        <div class="phase-body">
+          <p style="font-size:.9rem; margin-bottom:1rem;">Avant d'écrire la moindre ligne de code, tu dois mettre en place ton environnement de travail et planifier ton travail comme le ferait une vraie équipe de développement.</p>
+
+          <h4 style="margin-top:0;">1. Créer le dépôt GitHub</h4>
+          <ul class="checklist">
+            <li>Créer un nouveau dépôt public sur ton compte GitHub nommé <code>genshin-wiki-api</code></li>
+            <li>Initialiser le projet Rails localement : <code>rails new genshin-wiki-api --api --database=postgresql</code></li>
+            <li>Faire le premier commit et le pousser sur GitHub</li>
+            <li>Ajouter un fichier <code>README.md</code> décrivant brièvement le projet</li>
+            <li>Configurer le <code>.gitignore</code> pour exclure les fichiers sensibles (<code>.env</code>, credentials…)</li>
+          </ul>
+
+          <h4>2. Configurer le projet GitHub</h4>
+          <ul class="checklist">
+            <li>Activer <strong>GitHub Issues</strong> sur le dépôt</li>
+            <li>Créer un <strong>GitHub Project</strong> (vue Kanban) avec les colonnes : <em>À faire</em>, <em>En cours</em>, <em>En review</em>, <em>Terminé</em></li>
+            <li>Créer les <strong>labels</strong> suivants pour classifier les tickets :
+              <ul style="margin-top:.4rem; padding-left:1.2rem; list-style:disc;">
+                <li style="color:var(--text-muted); font-size:.85rem; padding:.1rem 0;"><code>model</code> — création ou modification d'un modèle</li>
+                <li style="color:var(--text-muted); font-size:.85rem; padding:.1rem 0;"><code>migration</code> — modification de la base de données</li>
+                <li style="color:var(--text-muted); font-size:.85rem; padding:.1rem 0;"><code>test</code> — écriture de tests</li>
+                <li style="color:var(--text-muted); font-size:.85rem; padding:.1rem 0;"><code>fixtures</code> — données de test</li>
+                <li style="color:var(--text-muted); font-size:.85rem; padding:.1rem 0;"><code>bug</code> — correction d'un problème</li>
+              </ul>
+            </li>
+          </ul>
+
+          <h4>3. Créer les tickets de la Phase 1</h4>
+          <p style="font-size:.88rem; color:var(--text-muted); margin-bottom:.75rem;">En te basant sur les livrables de la Phase 1 ci-dessous, réfléchis aux tickets à créer et rédige-les toi-même. Chaque ticket doit avoir : un <strong>titre clair</strong>, une <strong>description</strong> expliquant ce qu'il faut faire, les <strong>labels</strong> appropriés, et une <strong>définition of done</strong> (comment savoir que c'est terminé).</p>
+
+          <h4>4. Workflow Git à respecter</h4>
+          <ul class="checklist">
+            <li>Ne jamais committer directement sur <code>main</code></li>
+            <li>Créer une branche par ticket : <code>feature/nom-du-ticket</code></li>
+            <li>Ouvrir une <strong>Pull Request</strong> pour chaque ticket terminé</li>
+            <li>Référencer le ticket dans la PR : <em>"Closes #1"</em> dans la description</li>
+            <li>La PR est mergée uniquement après relecture</li>
+          </ul>
+
+          <div class="validation-box">
+            <strong>Critère de validation</strong>
+            Le dépôt est visible sur GitHub, le projet Kanban est créé, tous les tickets de la Phase 1 sont rédigés et visibles dans la colonne "À faire". Tu peux expliquer à quoi sert chacun des tickets.
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <h3>Phase 1 — Modèles &amp; Base de données</h3>
+          <span class="phase-badge badge-1">Phase 1</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Migrations créées et appliquées</li>
+            <li>Modèles avec associations (<code>belongs_to</code>, <code>has_many</code>, <code>has_many :through</code>)</li>
+            <li>Héritage STI fonctionnel (<code>PlayableCharacter</code>, <code>BossCharacter</code>)</li>
+            <li>Validations implémentées dans les modèles</li>
+            <li>Fixtures créées (10 personnages min., 3 utilisateurs, éléments, types d'armes)</li>
+            <li>Tests unitaires des modèles (validations, associations, callbacks)</li>
+          </ul>
+          <div class="validation-box">
+            <strong>Critère de validation</strong>
+            Les tests passent. Tu peux expliquer pourquoi tu as choisi <code>has_many :through</code> plutôt que <code>has_and_belongs_to_many</code> pour les tags.
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <h3>Phase 2 — API REST</h3>
+          <span class="phase-badge badge-2">Phase 2</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Routes configurées et versionnées</li>
+            <li>CRUD complet sur les personnages</li>
+            <li>CRUD sur les reviews (avec contrôle du propriétaire)</li>
+            <li>Gestion de la collection utilisateur</li>
+            <li>Réponses JSON cohérentes (structure uniforme)</li>
+            <li>Tests d'intégration des endpoints (status codes, contenu JSON)</li>
+          </ul>
+          <div class="validation-box">
+            <strong>Critère de validation</strong>
+            Tous les endpoints sont testables via curl ou Postman. Tu peux expliquer la différence entre un <code>404</code> et un <code>422</code>.
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <h3>Phase 3 — Filtres, Pagination &amp; Auth</h3>
+          <span class="phase-badge badge-3">Phase 3</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Filtres implémentés via scopes ActiveRecord</li>
+            <li>Pagination fonctionnelle avec métadonnées dans la réponse</li>
+            <li>Authentification par token (Devise ou JWT)</li>
+            <li>Gestion des rôles avec CanCanCan</li>
+            <li>Routes protégées selon les permissions</li>
+          </ul>
+          <div class="validation-box">
+            <strong>Critère de validation</strong>
+            Un visiteur ne peut pas poster de review. Un utilisateur ne peut pas modifier la review d'un autre. Un admin peut tout faire.
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <h3>Phase 4 — Services &amp; Gestion des erreurs</h3>
+          <span class="phase-badge badge-4">Phase 4</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Logique métier extraite dans des services</li>
+            <li>Erreurs métier personnalisées (<code>raise</code> / <code>rescue</code>)</li>
+            <li>Contrôleurs allégés (pas de logique métier directe)</li>
+            <li>Les erreurs retournent des réponses JSON structurées</li>
+          </ul>
+          <div class="validation-box">
+            <strong>Critère de validation</strong>
+            Tu peux expliquer pourquoi on utilise un service plutôt que mettre la logique dans le contrôleur ou le modèle.
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <h3>Phase 5 — Qualité &amp; Documentation</h3>
+          <span class="phase-badge badge-5">Phase avancée</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Code conforme à Rubocop (zéro offense)</li>
+            <li>API documentée avec Swagger (apipie-rails)</li>
+            <li>Au moins un job asynchrone (Sidekiq)</li>
+            <li>README à jour avec instructions d'installation</li>
+          </ul>
+          <div class="validation-box">
+            <strong>Critère de validation</strong>
+            La documentation Swagger permet de tester l'API sans lire le code. <code>rubocop</code> ne retourne aucune offense.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ 8. PHASE AVANCÉE ═══ -->
+  <section id="avancee">
+    <div class="section-header">
+      <div class="section-number">8</div>
+      <h2>Phase avancée</h2>
+    </div>
+    <p>Ces sujets sont abordés une fois les phases de base terminées et bien comprises.</p>
+
+    <div class="advanced-grid">
+
+      <div class="advanced-card">
+        <div class="letter">A</div>
+        <h4>Gestion des erreurs — raise / rescue</h4>
+        <ul>
+          <li>Créer ses propres classes d'erreur métier</li>
+          <li>Attraper les exceptions au bon niveau</li>
+          <li>Retourner des réponses JSON structurées</li>
+          <li>Ne jamais laisser une exception non traitée en production</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">B</div>
+        <h4>Service Objects</h4>
+        <ul>
+          <li>Extraire la logique complexe des modèles et contrôleurs</li>
+          <li>Un service = une responsabilité</li>
+          <li>Règle : si une action touche plus d'un modèle → service</li>
+          <li>Facilite les tests unitaires de logique métier</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">C</div>
+        <h4>Jobs &amp; Crons — Sidekiq</h4>
+        <ul>
+          <li>Pourquoi ne pas bloquer une requête HTTP</li>
+          <li>Différence job one-shot vs cron récurrent</li>
+          <li>File de messages et notion de queue</li>
+          <li>Idempotence d'un job</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">D</div>
+        <h4>Internationalisation — gem Mobility</h4>
+        <ul>
+          <li>Traduire <code>name</code> et <code>description</code> (FR, EN…)</li>
+          <li>Backend JSONB pour les traductions</li>
+          <li>Différence i18n Rails vs traduction de contenu</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">E</div>
+        <h4>Rubocop &amp; Guidelines</h4>
+        <ul>
+          <li>Configurer <code>.rubocop.yml</code></li>
+          <li>Corriger les offenses une par une</li>
+          <li>Comprendre les règles : longueur de méthode, style…</li>
+          <li>Intégration dans le workflow Git (pre-commit hook)</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">F</div>
+        <h4>Documentation Swagger</h4>
+        <ul>
+          <li>Documenter chaque endpoint avec apipie-rails</li>
+          <li>Décrire les paramètres, codes de retour, exemples</li>
+          <li>Swagger UI : tester l'API visuellement</li>
+          <li>Documentation = partie du code, pas une afterthought</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">G</div>
+        <h4>Bonus — Cache</h4>
+        <ul>
+          <li>Mettre en cache les listes peu modifiées</li>
+          <li><code>Rails.cache.fetch</code> avec expiration</li>
+          <li>Invalider le cache après <code>after_save</code> / <code>after_destroy</code></li>
+          <li>Comprendre pourquoi l'invalidation est difficile</li>
+        </ul>
+      </div>
+
+      <div class="advanced-card">
+        <div class="letter">H</div>
+        <h4>Bonus — Images ActiveStorage</h4>
+        <ul>
+          <li>Uploader un sprite par personnage</li>
+          <li>Générer des variants (thumbnail, full)</li>
+          <li>Format WebP, compression</li>
+          <li>Pourquoi ne jamais stocker les images en base</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ 9. CONTRAINTES ═══ -->
+  <section id="contraintes">
+    <div class="section-header">
+      <div class="section-number">9</div>
+      <h2>Contraintes techniques</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="label">Langage</span><span class="value">Ruby 3.4+</span></div>
+      <div class="stack-item"><span class="label">Framework</span><span class="value">Rails 8</span></div>
+      <div class="stack-item"><span class="label">Base de données</span><span class="value">PostgreSQL</span></div>
+      <div class="stack-item"><span class="label">Tests</span><span class="value">Minitest</span></div>
+      <div class="stack-item"><span class="label">Linting</span><span class="value">Rubocop</span></div>
+      <div class="stack-item"><span class="label">Droits</span><span class="value">CanCanCan</span></div>
+      <div class="stack-item"><span class="label">Auth</span><span class="value">Devise</span></div>
+      <div class="stack-item"><span class="label">Pagination</span><span class="value">Kaminari</span></div>
+      <div class="stack-item"><span class="label">Jobs</span><span class="value">Sidekiq</span></div>
+      <div class="stack-item"><span class="label">Versionning</span><span class="value">Git — 1 branche / phase</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ 10. ÉVALUATION ═══ -->
+  <section id="evaluation">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <h2>Critères d'évaluation</h2>
+    </div>
+    <div class="eval-grid">
+      <div class="eval-card">
+        <div class="eval-icon">⚙️</div>
+        <h4>Fonctionnement</h4>
+        <p>L'API répond correctement. Les cas d'erreur sont gérés. Les règles de droits sont respectées.</p>
+      </div>
+      <div class="eval-card">
+        <div class="eval-icon">🏗️</div>
+        <h4>Qualité du code</h4>
+        <p>Modèles avec validations, contrôleurs légers, services bien découpés, Rubocop sans offense.</p>
+      </div>
+      <div class="eval-card">
+        <div class="eval-icon">🧪</div>
+        <h4>Tests</h4>
+        <p>Modèles testés (validations, callbacks). Endpoints testés (happy path et cas d'erreur). Tests lisibles.</p>
+      </div>
+      <div class="eval-card">
+        <div class="eval-icon">💬</div>
+        <h4>Compréhension</h4>
+        <p>Tu peux expliquer chaque choix, identifier un bug dans ton code, et dire ce que tu ferais différemment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 11. QUESTIONS ═══ -->
+  <section id="questions">
+    <div class="section-header">
+      <div class="section-number">11</div>
+      <h2>Questions de référence</h2>
+    </div>
+    <p>Ces questions servent de base lors des points d'avancement. L'objectif n'est pas de les avoir toutes en tête dès le début, mais d'y répondre progressivement.</p>
+
+    <div class="questions-grid">
+      <div class="question-group">
+        <h4>OOP &amp; Modèles</h4>
+        <ul>
+          <li>Quelle est la différence entre une classe et une instance ?</li>
+          <li>Pourquoi <code>PlayableCharacter</code> hérite de <code>Character</code> et pas l'inverse ?</li>
+          <li>Que se passe-t-il si tu fais <code>Character.all</code> ?</li>
+          <li>Quand utilise-t-on <code>belongs_to</code> vs <code>has_many</code> ?</li>
+          <li>Différence entre <code>has_many :through</code> et <code>has_and_belongs_to_many</code> ?</li>
+        </ul>
+      </div>
+      <div class="question-group">
+        <h4>API &amp; HTTP</h4>
+        <ul>
+          <li>Différence entre <code>POST</code> et <code>PATCH</code> ?</li>
+          <li>Quand retourner un <code>404</code> ? Un <code>422</code> ? Un <code>403</code> ?</li>
+          <li>Pourquoi versionner une API (<code>/api/v1/</code>) ?</li>
+          <li>À quoi sert le header <code>Authorization</code> ?</li>
+        </ul>
+      </div>
+      <div class="question-group">
+        <h4>Tests</h4>
+        <ul>
+          <li>Pourquoi écrire des tests si le code fonctionne ?</li>
+          <li>Différence test unitaire vs test d'intégration ?</li>
+          <li>Que tester en priorité sur un modèle ?</li>
+          <li>Pourquoi les fixtures sont-elles importantes ?</li>
+        </ul>
+      </div>
+      <div class="question-group">
+        <h4>Architecture</h4>
+        <ul>
+          <li>Pourquoi déplacer la logique dans un service ?</li>
+          <li>Que se passe-t-il si on ne gère pas les exceptions ?</li>
+          <li>Pourquoi utiliser un job asynchrone ?</li>
+          <li>Quelle est la différence entre auth et autorisation ?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.5rem; border-color: rgba(108,142,255,.3); background: rgba(108,142,255,.05);">
+      <p style="margin:0; color: var(--text);">Bonne chance ! N'hésite pas à poser des questions dès que tu bloques — bloquer et chercher fait partie de l'apprentissage. Rester bloquée sans demander d'aide ne sert à rien.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Cahier des charges — GenshinWiki &nbsp;·&nbsp; Version 1.0 &nbsp;·&nbsp; Mars 2026 &nbsp;·&nbsp; Équipe technique QoQa
+</footer>
+
+</body>
+</html>
