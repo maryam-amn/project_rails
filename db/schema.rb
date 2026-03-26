@@ -14,14 +14,4 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_123648) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "characters", force: :cascade do |t|
-    t.decimal "average_counting"
-    t.datetime "created_at", null: false
-    t.text "description"
-    t.string "name"
-    t.integer "rarity"
-    t.string "region"
-    t.string "type"
-    t.datetime "updated_at", null: false
-  end
 end
