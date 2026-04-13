@@ -3,7 +3,7 @@ require "test_helper"
 class CharacterTest < ActiveSupport::TestCase
   test "Should create a new character" do
     character = Character.new(name: "Ayato",
-                              description: " un personnage 5 étoiles Hydro jouable dans Genshin Impact, épéiste à une main et chef du Clan Kamisato à Inazuma.",
+                              description: "Un personnage 5 étoiles Hydro jouable dans Genshin Impact, épéiste à une main et chef du Clan Kamisato à Inazuma.",
                               rarity: 5,
                               region: "Montstadt")
 
@@ -23,6 +23,13 @@ class CharacterTest < ActiveSupport::TestCase
 
   test "Shouldn't create a character if there isn't a description" do
     character = Character.new(name: "Yelan", rarity: 5)
+    assert_not character.valid?
+  end
+  
+  test "Shouldn't create a character if there too much description" do
+    character = Character.new(name: "Yelan", rarity: 5, description: "Yelan (Chinois: 夜兰 Yèlán, « Orchidée de nuit ») est un personnage Hydro jouable dans Genshin Impact.
+    C'est une personne mystérieuse qui prétend travailler pour le Bureau des affaires civiles à Liyue. Dans la quête du monde « Voyage au centre du Gouffre »,
+    Yelan apparaît dans une cinématique où elle est en train de brandir son arc[2] sur le cristal purifié afin de sauver le Voyageur du serpent des ruines.")
     assert_not character.valid?
   end
 
