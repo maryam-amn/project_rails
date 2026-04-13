@@ -25,7 +25,7 @@ class CharacterTest < ActiveSupport::TestCase
     character = Character.new(name: "Yelan", rarity: 5)
     assert_not character.valid?
   end
-  
+
   test "Shouldn't create a character if there too much description" do
     character = Character.new(name: "Yelan", rarity: 5, description: "Yelan (Chinois: 夜兰 Yèlán, « Orchidée de nuit ») est un personnage Hydro jouable dans Genshin Impact.
     C'est une personne mystérieuse qui prétend travailler pour le Bureau des affaires civiles à Liyue. Dans la quête du monde « Voyage au centre du Gouffre »,
