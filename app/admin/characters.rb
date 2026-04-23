@@ -22,15 +22,4 @@ ActiveAdmin.register Character do
     end
     actions
   end
-  controller do
-    def create
-      @character = Character.new(permitted_params[:character])
-      if @character.save
-        flash[:notice] = I18n.t("Characters.new.created")
-        redirect_to admin_characters_url
-      else
-        render :new, status: :unprocessable_content
-      end
-    end
-  end
 end
