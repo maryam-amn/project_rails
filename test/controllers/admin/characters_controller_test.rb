@@ -53,7 +53,7 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
           description: "un personnage 3 étoiles" }
       }
     end
-    
+
     assert_response :redirect
     assert_not_includes Character.last&.name.to_s, "Yelan"
   end
