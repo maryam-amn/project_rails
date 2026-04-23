@@ -31,10 +31,10 @@ en:
   hello: "Hello world"
   Characters:
       new:
-        add: "Add a Characters"
+        add: "Add a Character"
         info: "Fill in all the fields about the character "
-        created: "Character was created sucessfuly "
+        created: "Character was created sucessfully "
       errors:
         number_presence: "must be a number"
-        number_between_0_1: "must be between 1 and 5"
+        number_between_1_5: "must be between 1 and 5"
         choose_region: "choose a region from the list, can't be blank"
