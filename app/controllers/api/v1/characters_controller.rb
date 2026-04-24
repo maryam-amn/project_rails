@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class  Api::V1::CharactersController < ActionController::Base
   def index
     @characters = Character.all
