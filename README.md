@@ -28,3 +28,10 @@ rails server
 
 Open your browser and go to <http://127.0.0.1:3000/>
 
+### Connect to a the admin user
+- run db::seed 
+- Connect to this user with 
+  - email : admin@example.com
+  - password : password
+
+=> if you want to change it, you can change in [db/seeds.rb](db/seeds.rb)
