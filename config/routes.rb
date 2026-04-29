@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   scope :api do
     namespace :v1 do
-      get "/characters" => "/api/v1/characters#index"
+      get "/characters", to: "/api/v1/characters#index"
       end
   end
 end

@@ -1,19 +1,8 @@
-# frozen_string_literal: true
+# typed: false
 
 class  Api::V1::CharactersController < ActionController::Base
   def index
-    @characters = Character.all
-
-    render json:  { characters:
-       @characters.map do |character|
-         {
-           id: character.id.to_i,
-           name: character.name.to_s,
-           description: character.description.to_s,
-           rarity: character.rarity.to_i,
-           region: character.region.to_s
-         }
-       end
-    }
+    render json: { characters: characters_json }
   end
+  def characters_json = Character.all.map { |character| CharactersJson.new(character:).to_h }
 end

@@ -12,6 +12,17 @@ class  Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     character = characters(:yanfei_from_fontaine_region)
 
-    assert_includes response.body, character.name
+    expected_json =
+      {
+        id: 519887325,
+        name: "Yanfei",
+        description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
+        rarity: 4,
+        region: "Liyue"
+      }
+
+    character_to_json = CharactersJson.new(character:).to_h
+
+     assert_equal expected_json, character_to_json
   end
 end
