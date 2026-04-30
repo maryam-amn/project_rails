@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "test_helper"
+
 class CharacterJsonTest < ActiveSupport::TestCase
   test "Should get a character json" do
     character = characters(:yanfei_from_fontaine_region)
