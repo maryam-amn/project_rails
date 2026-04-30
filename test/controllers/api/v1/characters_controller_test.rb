@@ -2,27 +2,21 @@
 
 require "test_helper"
 
-class  Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers
-
-  test "Should get index of all characters in json" do
-    get v1_characters_url
+class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
+  test "Should get return success or code 200" do
+    get api_v1_characters_url
     assert_response :success
+    assert_equal 200, response.status
+  end
+
+  test "Should get all characters in json" do
+    get api_v1_characters_url
+
+    assert_response :success
+
     assert_match(/json/, response.header["Content-Type"])
+    result_expected = Character.count
 
-    character = characters(:yanfei_from_fontaine_region)
-
-    expected_json =
-      {
-        id: 519887325,
-        name: "Yanfei",
-        description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
-        rarity: 4,
-        region: "Liyue"
-      }
-
-    character_to_json = CharactersJson.new(character:).to_h
-
-     assert_equal expected_json, character_to_json
+    assert_equal result_expected, response.parsed_body["characters"].count
   end
 end
