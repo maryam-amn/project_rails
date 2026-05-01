@@ -21,4 +21,17 @@ class Api::V1::CharactersController < ApplicationController
           render json: CharacterJson.new(character:).to_h
         end
       end
+
+      api :POST, "/characters", "create a character"
+      api_version "v1"
+      returns code: 201
+      error :unprocessable_entity, "a field is required or unique"
+      def create
+        character = Character.new(params.permit(:name, :description, :rarity, :region))
+        if character.save
+          render json: CharacterJson.new(character:).to_h, status: :created
+        else
+          render json: character.errors, status: :unprocessable_entity
+        end
+      end
 end

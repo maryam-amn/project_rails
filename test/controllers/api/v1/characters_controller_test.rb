@@ -39,4 +39,43 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal response.parsed_body, error_message.as_json
   end
+
+  test "Should create a character and render it when all fi " do
+    post api_v1_characters_url params: { name: "xxxxxxx", description: "xxxxxx est un personnage Hydro jouable dans Genshin Impact", rarity: 2, region: "Liyue" }
+
+    assert_response :created
+
+    character = Character.last
+    character_to_json = CharacterJson.new(character:).to_h
+
+    assert_equal response.parsed_body, character_to_json.as_json
+  end
+
+  test "Shouldn't create a character with thw same name as another one" do
+    post api_v1_characters_url params: { name: "Yanfei", description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur", rarity: 4, region: "Liyue" }
+
+    assert_response :unprocessable_entity
+
+    error_message ={
+      "name": [
+        "has already been taken"
+      ]
+    }
+
+    assert_equal response.parsed_body, error_message.as_json
+  end
+
+  test "Shouldn't create a character when a field is blank" do
+    post api_v1_characters_url params: { name: "xxxx", description: "C'est un personnage Cyro 4 étoile", rarity: 4, region: "" }
+
+    assert_response :unprocessable_entity
+
+    error_message = {
+      "region": [
+        "choose a region from the list, can't be blank"
+      ]
+    }
+
+    assert_equal response.parsed_body, error_message.as_json
+  end
 end
