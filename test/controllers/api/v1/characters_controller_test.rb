@@ -30,7 +30,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body, character_to_json.as_json
   end
 
-  test "Should render a error if the character isn't found " do
+  test "Should render a error if the character isn't found" do
     get api_v1_character_url(id: 0)
 
     assert_response :not_found
@@ -40,7 +40,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body, error_message.as_json
   end
 
-  test "Should create a character and render it when all fi " do
+  test "Should create a character and render it when all fields are filled in" do
     post api_v1_characters_url params: { name: "xxxxxxx", description: "xxxxxx est un personnage Hydro jouable dans Genshin Impact", rarity: 2, region: "Liyue" }
 
     assert_response :created
