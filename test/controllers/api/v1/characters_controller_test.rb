@@ -65,7 +65,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body, error_message.as_json
   end
 
-  test "Shouldn't create a character when a field is blank" do
+  test "Shouldn't create a character when a required field is blank" do
     post api_v1_characters_url params: { name: "xxxx", description: "C'est un personnage Cyro 4 étoiles", rarity: 4, region: "" }
 
     assert_response :unprocessable_entity
