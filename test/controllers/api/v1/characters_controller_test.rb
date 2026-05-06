@@ -51,12 +51,12 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body, character_to_json.as_json
   end
 
-  test "Shouldn't create a character with thw same name as another one" do
+  test "Shouldn't create a character with the same name as another one" do
     post api_v1_characters_url params: { name: "Yanfei", description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur", rarity: 4, region: "Liyue" }
 
     assert_response :unprocessable_entity
 
-    error_message ={
+    error_message = {
       "name": [
         "has already been taken"
       ]
@@ -66,7 +66,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Shouldn't create a character when a field is blank" do
-    post api_v1_characters_url params: { name: "xxxx", description: "C'est un personnage Cyro 4 étoile", rarity: 4, region: "" }
+    post api_v1_characters_url params: { name: "xxxx", description: "C'est un personnage Cyro 4 étoiles", rarity: 4, region: "" }
 
     assert_response :unprocessable_entity
 
